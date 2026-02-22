@@ -23,7 +23,7 @@ Un **interruptor en la interfaz** permite cambiar entre ambos modos en tiempo re
 
 1.  **Clonar el repositorio:**
     ```bash
-    git clone https://github.com/TU_USUARIO/CADEL-WEB-AUDIT.git
+    git clone https://github.com/TU_USUARIO/Cadel-academy-lab.git
     cd CADEL-WEB-AUDIT
     ```
 
