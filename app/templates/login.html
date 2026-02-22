@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Acceso Administrativo</div>
+            <div class="card-body">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Usuario</label>
+                        <!-- Si es vulnerable, quitamos 'required' para permitir enviar campos vacíos -->
+                        {% if security_level == 'vulnerable' %}
+                            <input type="text" class="form-control" id="username" name="username">
+                        {% else %}
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        {% if security_level == 'vulnerable' %}
+                            <input type="password" class="form-control" id="password" name="password">
+                        {% else %}
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                </form>
+                
+                <hr>
+                <div class="text-center">
+                    <p>¿No tienes cuenta? <a href="/register">Regístrate aquí</a></p>
+                </div>
+                <div class="alert alert-info">
+                    <small>
+                        <strong>Pista para Auditoría:</strong><br>
+                        Prueba inyecciones SQL clásicas en el campo de usuario.<br>
+                        Ejemplo: <code>admin' OR '1'='1</code>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

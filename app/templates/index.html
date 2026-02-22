@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<div class="p-5 mb-4 bg-light rounded-3">
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Bienvenido a CADEL Academy</h1>
+        <p class="col-md-8 fs-4">Plataforma de aprendizaje colaborativo. Regístrate para acceder a los cursos, subir tus tareas y chatear con otros alumnos.</p>
+        
+        {% if security_level == 'vulnerable' %}
+            <div class="alert alert-danger">
+                <strong><i class="bi bi-exclamation-triangle-fill me-2"></i>MODO VULNERABLE ACTIVO</strong><br>
+                Estás en el entorno inseguro (Puerto 8080). <br><em>Objetivo:</em> Atacar la academia.
+            </div>
+        {% else %}
+            <div class="alert alert-success">
+                <strong><i class="bi bi-shield-check me-2"></i>MODO SEGURO ACTIVO</strong><br>
+                Las vulnerabilidades han sido mitigadas.
+            </div>
+        {% endif %}
+        
+        <hr class="my-4">
+        
+        <h3 class="mb-4">Áreas de la Academia</h3>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-key-fill me-2 text-primary"></i>Acceso Alumnos</h5>
+                        <p class="card-text">Inicia sesión para ver tus notas. (Vulnerable a SQL Injection).</p>
+                        <a href="/login" class="btn btn-primary">Login</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-chat-dots-fill me-2 text-success"></i>Chat y Foro</h5>
+                        <p class="card-text">Comunícate con profesores. (Vulnerable a XSS Stored).</p>
+                        <a href="/chat" class="btn btn-primary">Ir al Chat</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-person-badge-fill me-2 text-warning"></i>Perfil de Usuario</h5>
+                        <p class="card-text">Edita tu biografía y datos. (Vulnerable a XSS Stored e IDOR).</p>
+                        <a href="/profile" class="btn btn-primary">Mi Perfil</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="mt-5 mb-4">Vulnerabilidades Disponibles</h3>
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="card text-center h-100 p-3">
+                    <h6>SQL Injection</h6>
+                    <small class="text-muted">Bypass de Login</small>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-center h-100 p-3">
+                    <h6>XSS Reflected</h6>
+                    <small class="text-muted">Inyección en Buscador</small>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-center h-100 p-3">
+                    <h6>XSS Stored</h6>
+                    <small class="text-muted">Persistencia en Foro/Chat</small>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-center h-100 p-3">
+                    <h6>File Upload</h6>
+                    <small class="text-muted">Subida sin restricciones</small>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="mt-5 mb-4">Galería de Ejemplos</h3>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <!-- Asegúrate de subir la imagen a app/static/img/sqli.png -->
+                    <img src="{{ url_for('static', filename='img/sqli.png') }}" class="card-img-top" alt="SQL Injection" style="height: 200px; object-fit: cover; background-color: #eee;">
+                    <div class="card-footer">
+                        <small>Ejemplo: SQL Injection</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <img src="{{ url_for('static', filename='img/xss.png') }}" class="card-img-top" alt="XSS" style="height: 200px; object-fit: cover; background-color: #eee;">
+                    <div class="card-footer">
+                        <small>Ejemplo: Cross-Site Scripting</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <img src="{{ url_for('static', filename='img/upload.png') }}" class="card-img-top" alt="File Upload" style="height: 200px; object-fit: cover; background-color: #eee;">
+                    <div class="card-footer">
+                        <small>Ejemplo: Subida de Archivos</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

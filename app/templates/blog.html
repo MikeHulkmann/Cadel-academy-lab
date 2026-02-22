@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Blog Educativo{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Blog de CADEL Academy</h1>
+    <p class="lead mb-5">Recursos educativos, guías paso a paso y noticias sobre seguridad web.</p>
+
+    <div class="row">
+        <div class="col-md-12">
+            {% for post in posts %}
+            <article class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">{{ post.title }}</h2>
+                    <p class="text-muted small">Publicado el {{ post.date }}</p>
+                    <p class="card-text">{{ post.summary }}</p>
+                    <a href="{{ url_for('blog.post', slug=post.slug) }}" class="btn btn-primary btn-sm">Leer más &rarr;</a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

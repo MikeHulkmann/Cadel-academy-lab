@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Registro de Alumno</div>
+            <div class="card-body">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Usuario</label>
+                        {% if security_level == 'vulnerable' %}
+                            <input type="text" class="form-control" id="username" name="username">
+                        {% else %}
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        {% if security_level == 'vulnerable' %}
+                            <input type="password" class="form-control" id="password" name="password">
+                        {% else %}
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Registrarse</button>
+                </form>
+                
+                <hr>
+                <div class="text-center">
+                    <p>¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

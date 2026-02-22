@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Chat con {{ other_user.username }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white d-flex justify-content-between">
+                    <span><i class="bi bi-chat-dots-fill me-2"></i>Chat con <strong>{{ other_user.username }}</strong></span>
+                    <a href="{{ url_for('chat.index') }}" class="text-white text-decoration-none"><i class="bi bi-arrow-left me-1"></i>Volver</a>
+                </div>
+                <div class="card-body" style="height: 400px; overflow-y: auto; display: flex; flex-direction: column-reverse;">
+                    <ul class="list-unstyled mb-0">
+                        {% for msg in messages | reverse %}
+                        <li class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <strong>{{ msg.sender_username }}</strong>
+                                <small class="text-muted">{{ msg.created_at.strftime('%H:%M') }}</small>
+                            </div>
+                            <div class="p-2 rounded bg-light border">
+                                <!-- VULNERABILIDAD: XSS Stored en Mensajes de Chat -->
+                                {% if security_level == 'vulnerable' %}
+                                    {{ msg.message | safe }}
+                                {% else %}
+                                    {{ msg.message }}
+                                {% endif %}
+                            </div>
+                        </li>
+                        {% else %}
+                        <li class="text-center text-muted">No hay mensajes aún. ¡Sé el primero en escribir!</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <form method="POST" action="{{ url_for('chat.conversation', other_user_id=other_user_id) }}" class="d-flex gap-2">
+                        <input type="text" name="message" class="form-control" placeholder="Escribe un mensaje..." required autocomplete="off" autofocus>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-send-fill"></i></button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="alert alert-warning mt-3 audit-hint">
+                <strong>Pista para Auditoría (XSS en Chat):</strong><br>
+                Intenta enviar un mensaje con: <code>&lt;img src=x onerror=alert('XSS')&gt;</code><br>
+                Si es vulnerable, la alerta saltará para el otro usuario cuando abra este chat.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

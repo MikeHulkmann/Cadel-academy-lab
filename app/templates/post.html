@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Noticia{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <!-- Contenido del Post -->
+        <article class="blog-post mb-5">
+            {% if post %}
+                <h2 class="blog-post-title">{{ post.title }}</h2>
+                <p class="blog-post-meta">Publicado por Admin</p>
+                <hr>
+                <p>{{ post.content }}</p>
+            {% else %}
+                <h2>Noticia no encontrada</h2>
+                <p>Asegúrate de haber inicializado la base de datos.</p>
+            {% endif %}
+        </article>
+
+        <!-- Sección de Comentarios -->
+        <section>
+            <h3>Comentarios</h3>
+            
+            <!-- Formulario -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="POST" action="{{ request.path }}">
+                        <div class="mb-3">
+                            <label for="comment" class="form-label">Deja un comentario:</label>
+                            <textarea class="form-control" id="comment" name="content" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Lista de Comentarios -->
+            {% for comment in comments %}
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <!-- VULNERABILIDAD: XSS Stored -->
+                        {% if security_level == 'vulnerable' %}
+                            {{ comment.content | safe }}
+                        {% else %}
+                            {{ comment.content }}
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-muted">No hay comentarios aún.</p>
+            {% endfor %}
+            
+            <div class="alert alert-warning mt-4 audit-hint">
+                <strong>Pista para Auditoría (Stored XSS):</strong><br>
+                Escribe un comentario con: <code>&lt;script&gt;alert('Hack')&lt;/script&gt;</code><br>
+                Si al recargar la página salta la alerta, el script se guardó en la BD sin sanitizar.
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Términos y Condiciones{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Términos y Condiciones de Uso</h1>
+    <p class="text-muted">Última actualización: 22 de Febrero de 2026</p>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h4>1. Aceptación de los Términos</h4>
+            <p>Al acceder y utilizar Cadel Academy, aceptas cumplir con estos términos y condiciones. Esta plataforma es un entorno educativo diseñado exclusivamente para el aprendizaje de ciberseguridad y hacking ético.</p>
+
+            <h4>2. Uso Permitido</h4>
+            <p>Se te concede permiso para utilizar esta plataforma con fines educativos y de investigación. Eres libre de explorar, analizar y explotar las vulnerabilidades presentes en este entorno controlado.</p>
+            <ul>
+                <li>Está permitido el uso de herramientas automatizadas (scanners, fuzzers) contra este entorno local.</li>
+                <li>Está permitido intentar comprometer la seguridad de la aplicación dentro de los límites de este laboratorio.</li>
+            </ul>
+
+            <h4>3. Restricciones</h4>
+            <p>Queda estrictamente prohibido:</p>
+            <ul>
+                <li>Utilizar los conocimientos adquiridos aquí para atacar sistemas reales sin autorización.</li>
+                <li>Intentar atacar la infraestructura subyacente (host de Docker, red local) fuera de los contenedores proporcionados.</li>
+                <li>Subir contenido ilegal, ofensivo o que viole derechos de autor en las secciones de subida de archivos o foros.</li>
+            </ul>
+
+            <h4>4. Exención de Responsabilidad</h4>
+            <p>Cadel Academy se proporciona "tal cual", sin garantías de ningún tipo. Los creadores no se hacen responsables del mal uso de la información o herramientas proporcionadas en esta plataforma.</p>
+
+            <h4>5. Modificaciones</h4>
+            <p>Nos reservamos el derecho de modificar estos términos en cualquier momento. Es tu responsabilidad revisarlos periódicamente.</p>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <a href="/" class="btn btn-primary">Volver al Inicio</a>
+    </div>
+</div>
+{% endblock %}

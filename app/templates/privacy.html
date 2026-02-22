@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Política de Privacidad{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Política de Privacidad</h1>
+    <p class="text-muted">Última actualización: 22 de Febrero de 2026</p>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h4>1. Información que Recopilamos</h4>
+            <p>Cadel Academy recopila la mínima información necesaria para el funcionamiento de la plataforma educativa:</p>
+            <ul>
+                <li><strong>Datos de Registro:</strong> Nombre de usuario y contraseña (almacenados en la base de datos local del laboratorio).</li>
+                <li><strong>Actividad:</strong> Publicaciones en foros, mensajes de chat y archivos subidos como parte de los ejercicios.</li>
+                <li><strong>Cookies:</strong> Utilizamos cookies técnicas para gestionar la sesión del usuario y el estado de seguridad (Modo Vulnerable/Seguro).</li>
+            </ul>
+
+            <h4>2. Uso de la Información</h4>
+            <p>La información recopilada se utiliza exclusivamente para:</p>
+            <ul>
+                <li>Permitir el acceso a las áreas privadas (Foro, Chat, Uploads).</li>
+                <li>Mantener la persistencia de tus ejercicios durante la sesión de laboratorio.</li>
+            </ul>
+            <p>Dado que este es un entorno local, tus datos no se envían a servidores externos ni terceros.</p>
+
+            <h4>3. Seguridad de los Datos</h4>
+            <p>Ten en cuenta que esta aplicación es <strong>intencionalmente vulnerable</strong>. No utilices contraseñas reales ni subas información personal sensible, ya que podría ser expuesta mediante las vulnerabilidades del sistema (SQL Injection, XSS, etc.).</p>
+
+            <h4>4. Derechos del Usuario</h4>
+            <p>Puedes solicitar la eliminación de tu cuenta o resetear el entorno de laboratorio en cualquier momento reiniciando los contenedores de Docker.</p>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <a href="/" class="btn btn-primary">Volver al Inicio</a>
+    </div>
+</div>
+{% endblock %}

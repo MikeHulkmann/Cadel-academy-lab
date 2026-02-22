@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Mi Perfil{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Mi Perfil</h1>
+        <a href="/dashboard" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-2"></i>Volver al Panel</a>
+    </div>
+    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="row">
+        <!-- Columna Izquierda: Avatar y Cambio de Contraseña -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <div class="rounded-circle mx-auto mb-3 bg-secondary d-flex align-items-center justify-content-center text-white" style="width: 150px; height: 150px; font-size: 4rem;"><i class="bi bi-person-fill"></i></div>
+                    <h5 class="my-3">
+                        <!-- [AUDITORÍA] XSS Stored en Nombre de Usuario -->
+                        {% if security_level == 'vulnerable' %}
+                            {{ user.username | safe }}
+                        {% else %}
+                            {{ user.username }}
+                        {% endif %}
+                    </h5>
+                    <p class="text-muted mb-1">{{ user.role }}</p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">Cambiar Contraseña</div>
+                <div class="card-body">
+                    <form method="POST">
+                        <input type="hidden" name="action" value="change_password">
+                        <div class="mb-3">
+                            <label class="form-label">Contraseña Actual</label>
+                            <input type="password" class="form-control" name="current_password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nueva Contraseña</label>
+                            <input type="password" class="form-control" name="new_password" required>
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100">Actualizar Contraseña</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna Derecha: Datos Personales -->
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">Información Personal</div>
+                <div class="card-body">
+                    <form method="POST">
+                        <input type="hidden" name="action" value="update_profile">
+                        <div class="row mb-3">
+                            <div class="col-sm-3"><label class="col-form-label">Nombre Completo</label></div>
+                            <div class="col-sm-9"><input type="text" class="form-control" name="full_name" value="{{ user.full_name or '' }}"></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3"><label class="col-form-label">Email</label></div>
+                            <div class="col-sm-9"><input type="email" class="form-control" name="email" value="{{ user.email or '' }}"></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3"><label class="col-form-label">Teléfono</label></div>
+                            <div class="col-sm-9"><input type="text" class="form-control" name="phone" value="{{ user.phone or '' }}"></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3"><label class="col-form-label">Dirección</label></div>
+                            <div class="col-sm-9"><input type="text" class="form-control" name="address" value="{{ user.address or '' }}"></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3"><label class="col-form-label">Ciudad</label></div>
+                            <div class="col-sm-9"><input type="text" class="form-control" name="city" value="{{ user.city or '' }}"></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3"><label class="col-form-label">Sitio Web</label></div>
+                            <div class="col-sm-9"><input type="text" class="form-control" name="website" value="{{ user.website or '' }}"></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3"><label class="col-form-label">Bio (Max 150)</label></div>
+                            <div class="col-sm-9">
+                                <!-- [AUDITORÍA] XSS Stored en Biografía -->
+                                <textarea class="form-control" name="bio" rows="3" maxlength="150">
+                                    {% if security_level == 'vulnerable' %}
+                                        {{ user.bio | safe }}
+                                    {% else %}
+                                        {{ user.bio or '' }}
+                                    {% endif %}
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </div>
+                    </form>
+                    
+                    <div class="alert alert-warning mt-3 audit-hint">
+                        <strong>Pista Auditoría (XSS Stored):</strong> Intenta inyectar HTML/JS en el campo "Bio" o "Nombre Completo". Si al recargar o ver tu perfil público se ejecuta, es vulnerable.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Foro de Estudiantes{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>Foro de Discusión</h1>
+            <p class="lead">Comparte tus dudas, hallazgos o sube tus archivos a la comunidad.</p>
+        </div>
+    </div>
+
+    <!-- Formulario para nuevo post -->
+    <div class="card mb-5">
+        <div class="card-header">Crear Nueva Publicación</div>
+        <div class="card-body bg-light">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Título (Opcional)</label>
+                    <input type="text" class="form-control" id="title" name="title">
+                </div>
+                <div class="mb-3">
+                    <label for="content" class="form-label">Comentario (Opcional)</label>
+                    <textarea class="form-control" id="content" name="content" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="file" class="form-label">Subir Archivo (Opcional)</label>
+                    <input class="form-control" type="file" id="file" name="file">
+                </div>
+                <button type="submit" class="btn btn-success">Publicar en el Tablón</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tablón Público -->
+    <h2 class="mb-4">Tablón Público</h2>
+    <div class="row">
+        {% for post in posts %}
+        <div class="col-md-12 mb-3">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <!-- [AUDITORÍA] XSS Stored en Título -->
+                        {% if security_level == 'vulnerable' and post.title %}
+                            <!-- [VULNERABLE] Renderizado sin escape -->
+                            {{ post.title | safe }}
+                        {% else %}
+                            <!-- [SEGURO] Renderizado con escape automático -->
+                            {{ post.title or 'Publicación sin título' }}
+                        {% endif %}
+                    </h5>
+                    <small class="text-muted">Por: {{ post.username }} el {{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                </div>
+                <div class="card-body">
+                    {% if post.content %}
+                    <p class="card-text">
+                        <!-- [AUDITORÍA] XSS Stored en Contenido -->
+                        {% if security_level == 'vulnerable' %}
+                            <!-- [VULNERABLE] Permite persistencia de scripts -->
+                            {{ post.content | safe }}
+                        {% else %}
+                            <!-- [SEGURO] Sanitización automática -->
+                            {{ post.content }}
+                        {% endif %}
+                    </p>
+                    {% endif %}
+
+                    {% if post.filename %}
+                    <div class="mt-3">
+                        <strong>Archivo adjunto:</strong>
+                        <a href="{{ url_for('static', filename=post.filepath) }}" target="_blank"><i class="bi bi-file-earmark-arrow-down-fill me-1"></i>{{ post.filename }}</a>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-end">
+                    <button class="btn btn-sm btn-outline-warning star-btn" data-post-id="{{ post.id }}">
+                        <i class="bi bi-star-fill"></i> <span class="star-count">{{ post.stars }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info">No hay publicaciones aún. ¡Sé el primero!</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const starButtons = document.querySelectorAll('.star-btn');
+    starButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const postId = button.dataset.postId;
+            const starCountSpan = button.querySelector('.star-count');
+
+            fetch(`/forum/star/${postId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.stars !== undefined) {
+                    starCountSpan.textContent = data.stars;
+                } else {
+                    console.error('Error al actualizar estrellas:', data.error);
+                }
+            })
+            .catch(error => console.error('Error de red:', error));
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Buscador{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Buscador de Noticias</h2>
+        <form action="/search" method="GET" class="d-flex gap-2 mb-4">
+            <input type="text" name="q" class="form-control" placeholder="Buscar..." value="{{ request.args.get('q', '') }}">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+
+        {% if query %}
+            <div class="card">
+                <div class="card-header">Resultados</div>
+                <div class="card-body">
+                    <p class="lead">
+                        Resultados para: 
+                        <!-- [AUDITORÍA] XSS Reflected -->
+                        {% if security_level == 'vulnerable' %}
+                            <!-- [VULNERABLE] El filtro 'safe' desactiva el escape automático de HTML. -->
+                            <!-- El navegador ejecutará cualquier script inyectado en 'query'. -->
+                            {{ query | safe }}
+                        {% else %}
+                            <!-- [SEGURO] Jinja2 escapa automáticamente los caracteres especiales (<, >, &). -->
+                            {{ query }}
+                        {% endif %}
+                    </p>
+                    <hr>
+                    <p><em>No se encontraron noticias con ese término (Simulado).</em></p>
+                </div>
+            </div>
+            
+            <div class="alert alert-info mt-3 audit-hint">
+                <strong>Pista para Auditoría:</strong><br>
+                Intenta buscar: <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code><br>
+                Si ves la alerta, es vulnerable.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
