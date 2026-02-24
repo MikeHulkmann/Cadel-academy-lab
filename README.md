@@ -4,11 +4,11 @@
 
 El proyecto simula una academia online funcional (con foro, chat, perfiles de usuario, blog, etc.) que permite a los estudiantes explorar, explotar y entender vulnerabilidades web comunes en un entorno seguro y controlado.
 
-## 🚀 Arquitectura
+## ️ Arquitectura
 
 La aplicación implementa una arquitectura dual única utilizando **Docker Compose**:
 
-*   **Modo Vulnerable (Puerto 8080):** La aplicación se ejecuta sin protecciones, permitiendo ataques como SQL Injection, XSS, RCE, etc.
+*   **Modo Vulnerable (Puerto 8080):** La aplicación se ejecuta sin protecciones, permitiendo ataques como SQL Injection, XSS, Carga de archivos sin restricciones, Open Redirect, etc.
 *   **Modo Seguro (Puerto 8443):** La misma aplicación, pero protegida tras un proxy inverso **Nginx** con HTTPS, cabeceras de seguridad y código sanitizado.
 
 Un **interruptor en la interfaz** permite cambiar entre ambos modos en tiempo real para comparar el comportamiento.
@@ -17,7 +17,6 @@ Un **interruptor en la interfaz** permite cambiar entre ambos modos en tiempo re
 
 ### Prerrequisitos
 *   Docker y Docker Compose instalados.
-*   OpenSSL (generalmente preinstalado en Linux/Mac, necesario para generar certificados HTTPS).
 
 ### Pasos de Instalación
 
@@ -60,31 +59,41 @@ Explora las siguientes vulnerabilidades implementadas en el sistema:
 
 ### 1. SQL Injection (SQLi)
 *   **Ubicación:** Formulario de Login (`/login`) y Buscador de Chat (`/chat`).
-*   **Objetivo:** Iniciar sesión como administrador sin contraseña o extraer datos de usuarios.
+*   **Objetivo:** Iniciar sesión como administrador sin conocer la contraseña o extraer datos de la base de datos (usuarios, contraseñas, etc.).
 *   **Payload:** `admin' OR '1'='1`
+*   **Laboratorio:** Sigue los pasos detallados en `LABs/LAB-01-SQL-Injection-Login.md` y `LABs/LAB-02-SQL-Injection-Chat.md`.
 
 ### 2. Cross-Site Scripting (XSS)
 *   **Reflected:** En el buscador principal (`/search`).
 *   **Stored:** En el Foro (`/forum`), Chat (`/chat`) y Perfil de Usuario (`/profile`).
 *   **Objetivo:** Ejecutar JavaScript en el navegador de otro usuario (ej. `alert(1)` o robo de cookies).
+*   **Laboratorio:** Consulta `LABs/LAB-03-XSS-Reflected.md`, `LABs/LAB-04-XSS-Stored.md` y `LABs/LAB-04b-XSS-Advanced.md`.
 
 ### 3. Unrestricted File Upload (RCE)
 *   **Ubicación:** Formulario de creación de temas en el Foro.
 *   **Objetivo:** Subir un archivo con extensión peligrosa (ej. `.html` con JS o scripts de servidor) y ejecutarlo.
+*   **Laboratorio:** Sigue las instrucciones en `LABs/LAB-05-File-Upload-RCE.md`.
 
 ### 4. Gestión de Sesiones Insegura
 *   **Ubicación:** Toda la aplicación.
 *   **Objetivo:** Interceptar cookies de sesión (falta de flags `HttpOnly` y `Secure` en modo vulnerable).
+*   **Laboratorio:** Consulta `LABs/LAB-06-Insecure-Cookies.md`.
 
 ### 5. Reconocimiento (Information Disclosure)
 *   **Ubicación:** `robots.txt` y rutas ocultas.
 *   **Objetivo:** Encontrar archivos de configuración sensibles usando herramientas como `nmap` o `dirb`.
+*   **Laboratorio:** Sigue los pasos en `LABs/LAB-07-Reconnaissance.md`.
+
+### 6. Redirección Abierta (Open Redirect)
+*   **Ubicación:** Parámetro `target` en la URL.
+*   **Objetivo:** Redirigir a los usuarios a sitios web maliciosos aprovechando la confianza en el dominio de la academia.
+*   **Laboratorio:** Sigue las instrucciones en `LABs/LAB-08-Open-Redirect.md`.
 
 ## 📂 Estructura del Proyecto
 
 ```text
 CADEL-WEB-AUDIT/
-├── app/                # Código fuente de la aplicación (Flask)
+├── app/ # Código fuente de la aplicación (Flask)
 │   ├── routes/         # Lógica vulnerable vs segura
 │   ├── templates/      # Vistas HTML (Jinja2)
 │   └── static/         # CSS, JS e imágenes
