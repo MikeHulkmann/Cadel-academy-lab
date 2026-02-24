@@ -66,43 +66,49 @@ Explora las siguientes vulnerabilidades implementadas en el sistema:
 *   **Ubicación:** Formulario de Login (`/login`) y Buscador de Chat (`/chat`).
 *   **Objetivo:** Iniciar sesión como administrador sin conocer la contraseña o extraer datos de la base de datos (usuarios, contraseñas, etc.).
 *   **Payload:** `admin' OR '1'='1`
-*   **Laboratorio:** Sigue los pasos detallados en `LABs/LAB-01-SQL-Injection-Login.md` y `LABs/LAB-02-SQL-Injection-Chat.md`.
+*   **Laboratorios:** 
+    *   `LABs/LAB-01-SQL-Injection-Login.md`
+    *   `LABs/LAB-02-SQL-Injection-Chat.md`
 
 ### 2. Cross-Site Scripting (XSS)
 *   **Reflected:** En el buscador principal (`/search`).
 *   **Stored:** En el Foro (`/forum`), Chat (`/chat`) y Perfil de Usuario (`/profile`).
+*   **Advanced:** Exfiltración de cookies y redirección forzada.
 *   **Objetivo:** Ejecutar JavaScript en el navegador de otro usuario (ej. `alert(1)` o robo de cookies).
-*   **Laboratorio:** Consulta `LABs/LAB-03-XSS-Reflected.md`, `LABs/LAB-04-XSS-Stored.md` y `LABs/LAB-04b-XSS-Advanced.md`.
+*   **Laboratorios:** 
+    *   `LABs/LAB-03-XSS-Reflected.md`
+    *   `LABs/LAB-04-XSS-Stored.md`
+    *   `LABs/LAB-04b-XSS-Advanced.md` (Nuevo)
 
 ### 3. Unrestricted File Upload (RCE)
 *   **Ubicación:** Formulario de creación de temas en el Foro.
 *   **Objetivo:** Subir un archivo con extensión peligrosa (ej. `.html` con JS o scripts de servidor) y ejecutarlo.
-*   **Laboratorio:** Sigue las instrucciones en `LABs/LAB-05-File-Upload-RCE.md`.
+*   **Laboratorio:** `LABs/LAB-05-File-Upload-RCE.md`
 
 ### 4. Gestión de Sesiones Insegura
 *   **Ubicación:** Toda la aplicación.
 *   **Objetivo:** Interceptar cookies de sesión (falta de flags `HttpOnly` y `Secure` en modo vulnerable).
-*   **Laboratorio:** Consulta `LABs/LAB-06-Insecure-Cookies.md`.
+*   **Laboratorio:** `LABs/LAB-06-Insecure-Cookies.md`
 
 ### 5. Reconocimiento (Information Disclosure)
 *   **Ubicación:** `robots.txt` y rutas ocultas.
 *   **Objetivo:** Encontrar archivos de configuración sensibles usando herramientas como `nmap` o `dirb`.
-*   **Laboratorio:** Sigue los pasos en `LABs/LAB-07-Reconnaissance.md`.
+*   **Laboratorio:** `LABs/LAB-07-Reconnaissance.md`
 
 ### 6. Redirección Abierta (Open Redirect)
 *   **Ubicación:** Parámetro `target` en la URL.
 *   **Objetivo:** Redirigir a los usuarios a sitios web maliciosos aprovechando la confianza en el dominio de la academia.
-*   **Laboratorio:** Sigue las instrucciones en `LABs/LAB-08-Open-Redirect.md`.
+*   **Laboratorio:** `LABs/LAB-08-Open-Redirect.md` (Nuevo)
 
 ### 7. Cross-Site Request Forgery (CSRF)
 *   **Ubicación:** Formularios de cambio de estado (Perfil, Foro).
 *   **Objetivo:** Forzar a un usuario autenticado a realizar acciones no deseadas (ej. cambiar contraseña) sin su consentimiento.
-*   **Laboratorio:** Incluido en la auditoría final `LABs/LAB-09-Full-Audit-Simulation.md`.
+*   **Laboratorio:** Incluido en `LABs/LAB-09-Full-Audit-Simulation.md`
 
 ### 8. Simulación de Auditoría Completa (Capstone)
 *   **Descripción:** Un ejercicio integral que combina todas las vulnerabilidades anteriores en un escenario de pentesting realista.
 *   **Objetivo:** Comprometer totalmente la plataforma desde cero.
-*   **Laboratorio:** `LABs/LAB-09-Full-Audit-Simulation.md`.
+*   **Laboratorio:** `LABs/LAB-09-Full-Audit-Simulation.md` (Capstone)
 
 ## 📂 Estructura del Proyecto
 
