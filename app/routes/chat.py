@@ -12,6 +12,7 @@ def index():
     user_id = session['user_id']
     search_query = request.args.get('q', '')
     search_results = []
+    error = None
     
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True, buffered=True)
@@ -23,13 +24,16 @@ def index():
             # Permite enumerar usuarios o extraer datos con UNION.
             # Payload ejemplo: ' UNION SELECT 1, @@version -- -
             query = f"SELECT id, username FROM users WHERE username LIKE '%{search_query}%' AND id != {user_id}"
-            cursor.execute(query)
+            try:
+                cursor.execute(query)
+                search_results = cursor.fetchall()
+            except Exception as e:
+                error = f"Error SQL: {e}"
         else:
             # [SEGURO] Uso de parámetros para sanitizar la entrada
             query = "SELECT id, username FROM users WHERE username LIKE %s AND id != %s"
             cursor.execute(query, (f"%{search_query}%", user_id))
-        
-        search_results = cursor.fetchall()
+            search_results = cursor.fetchall()
 
     # --- Obtener Conversaciones Existentes ---
     cursor.execute("""
@@ -43,7 +47,7 @@ def index():
     cursor.close()
     conn.close()
 
-    return render_template('chat.html', conversations=conversations, search_results=search_results, search_query=search_query)
+    return render_template('chat.html', conversations=conversations, search_results=search_results, search_query=search_query, error=error)
 
 
 @bp.route('/chat/<int:other_user_id>', methods=['GET', 'POST'])
