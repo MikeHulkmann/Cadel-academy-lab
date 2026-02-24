@@ -1,4 +1,4 @@
-# Laboratorio 08: Simulación de Auditoría Web Completa (Capstone Project)
+# Laboratorio 09: Simulación de Auditoría Web Completa (Capstone Project)
 
 ## 🎯 Objetivo
 Realizar una auditoría de seguridad integral (Pentest) a la plataforma CADEL Academy, simulando un encargo profesional real. Este laboratorio consolida todos los conocimientos previos en un único ejercicio de flujo continuo, desde el reconocimiento hasta la verificación de parches.
@@ -73,6 +73,13 @@ Activa el **Modo Vulnerable** (Puerto 8080). Tu objetivo es encontrar, explotar 
 *   **Vector:** Inspección de los atributos de las cookies.
 *   **Objetivo:** Determinar si la cookie de sesión es vulnerable a robo (falta de `HttpOnly`) o interceptación (falta de `Secure`).
 *   **Guía:** Utiliza la consola y la pestaña "Aplicación" de las herramientas de desarrollador, como se describe en el **LAB-06 (Insecure Cookies)**.
+
+### 2.6. Redirección Abierta (Open Redirect)
+*   **Prueba:** Abusar de funcionalidades de redirección para dirigir a los usuarios a sitios externos.
+*   **Vector:** Parámetro `target` en la URL.
+*   **Objetivo:** Construir una URL que, bajo el dominio de Cadel Academy, redirija a un sitio de phishing simulado (ej. `youtube.com`).
+*   **Guía:** Sigue las instrucciones del **LAB-08 (Open Redirect)**.
+*   **Payload:** `/redirect?target=https://youtube.com`
 
 ---
 

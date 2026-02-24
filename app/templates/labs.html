@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Laboratorios de Seguridad{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="display-5 fw-bold border-bottom pb-2 mb-4">Guías Prácticas de Laboratorio</h1>
+    <p class="lead mb-5">
+        Aquí encontrarás guías paso a paso para explotar y entender cada una de las vulnerabilidades presentes en la plataforma. Selecciona un laboratorio para comenzar.
+    </p>
+
+    {% for lab in labs %}
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title"><a href="{{ url_for('labs.lab', slug=lab.slug) }}" class="text-decoration-none">{{ lab.title }}</a></h3>
+            <p class="card-text text-muted">{{ lab.summary }}</p>
+            <a href="{{ url_for('labs.lab', slug=lab.slug) }}" class="btn btn-primary">Comenzar Laboratorio <i class="bi bi-arrow-right-circle-fill ms-1"></i></a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

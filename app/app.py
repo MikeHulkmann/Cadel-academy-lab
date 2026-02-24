@@ -9,7 +9,7 @@ app.config['SECRET_KEY'] = 'clave_secreta_para_demos'
 SECURITY_LEVEL = os.getenv('SECURITY_LEVEL', 'vulnerable')
 app.config['SECURITY_LEVEL'] = SECURITY_LEVEL # Establecer en la config
 # Inicializar rutas
-from routes import login, search, posts, dashboard, blog, forum, chat, help, user
+from routes import login, search, posts, dashboard, blog, forum, chat, help, user, labs
 app.register_blueprint(login.bp)
 app.register_blueprint(search.bp)
 app.register_blueprint(posts.bp)
@@ -19,6 +19,7 @@ app.register_blueprint(forum.bp)
 app.register_blueprint(chat.bp)
 app.register_blueprint(help.bp)
 app.register_blueprint(user.bp)
+app.register_blueprint(labs.bp)
 
 # Importar el middleware
 from utils.middleware import load_security_level, get_security_level

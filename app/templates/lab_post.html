@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}{{ lab.title }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <h1 class="display-5 fw-bold mb-4">{{ lab.title }}</h1>
+            <!-- El filtro |safe es necesario porque el contenido ya es HTML -->
+            <div class="lab-content">{{ lab.content | safe }}</div>
+            <div class="mt-5 pt-4 border-top">
+                <a href="{{ url_for('labs.index') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-2"></i>Volver a Laboratorios</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
