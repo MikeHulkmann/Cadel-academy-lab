@@ -50,7 +50,7 @@ def index():
     return render_template('chat.html', conversations=conversations, search_results=search_results, search_query=search_query, error=error)
 
 
-@bp.route('/chat/<int:other_user_id>', methods=['GET', 'POST'])
+@bp.route('/chat/<other_user_id>', methods=['GET', 'POST'])
 def conversation(other_user_id):
     if 'user_id' not in session:
         return redirect(url_for('login.login'))
