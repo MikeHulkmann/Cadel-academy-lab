@@ -8,7 +8,7 @@ El proyecto simula una academia online funcional (con foro, chat, perfiles de us
 
 La aplicación implementa una arquitectura dual única utilizando **Docker Compose**:
 
-*   **Modo Vulnerable (Puerto 8080):** La aplicación se ejecuta sin protecciones, permitiendo ataques como SQL Injection, XSS, Carga de archivos sin restricciones, Open Redirect, etc.
+*   **Modo Vulnerable (Puerto 8080):** La aplicación se ejecuta sin protecciones, permitiendo ataques como SQL Injection, XSS, CSRF, Carga de archivos sin restricciones, Open Redirect, etc.
 *   **Modo Seguro (Puerto 8443):** La misma aplicación, pero protegida tras un proxy inverso **Nginx** con HTTPS, cabeceras de seguridad y código sanitizado.
 
 Un **interruptor en la interfaz** permite cambiar entre ambos modos en tiempo real para comparar el comportamiento.
@@ -16,7 +16,13 @@ Un **interruptor en la interfaz** permite cambiar entre ambos modos en tiempo re
 ## 🛠️ Instalación y Ejecución
 
 ### Prerrequisitos
-*   Docker y Docker Compose instalados.
+Este laboratorio requiere **Docker** y **Docker Compose** para funcionar. Si no los tienes instalados:
+
+*   **Windows / Mac:** Instala [Docker Desktop](https://www.docker.com/products/docker-desktop/). Incluye todo lo necesario.
+*   **Linux:**
+    *   Instala Docker Engine: [Guía oficial](https://docs.docker.com/engine/install/).
+    *   Instala Docker Compose: [Guía oficial](https://docs.docker.com/compose/install/).
+    *   *Nota:* Asegúrate de que el servicio esté corriendo (`sudo systemctl start docker`) y que tu usuario tenga permisos (`sudo usermod -aG docker $USER`).
 
 ### Pasos de Instalación
 
@@ -26,21 +32,20 @@ Un **interruptor en la interfaz** permite cambiar entre ambos modos en tiempo re
     cd CADEL-WEB-AUDIT
     ```
 
-2.  **Generar Certificados SSL:**
-    Para habilitar el modo seguro (HTTPS), ejecuta el script de generación de certificados:
-    ```bash
-    ./scripts/generate_certs.sh
-    ```
-    *(Si estás en Windows y no tienes bash, puedes usar openssl manualmente o WSL).*
-
-3.  **Levantar el entorno:**
+2.  **Levantar el entorno:**
+    Ejecuta el siguiente comando para construir y arrancar los contenedores. El sistema **generará automáticamente** los certificados SSL necesarios para el modo seguro en el primer inicio, garantizando la compatibilidad en cualquier sistema operativo (Linux, Windows, Mac).
     ```bash
     docker-compose up --build
     ```
 
-4.  **Acceder a la plataforma:**
+3.  **Acceder a la plataforma:**
     *   Abre tu navegador y ve a: **http://localhost:8080**
     *   Para ver la versión segura: **https://localhost:8443** (Acepta la advertencia de certificado autofirmado).
+
+### Gestión del Entorno
+
+*   **Detener:** `docker-compose down`
+*   **Reset Completo (Borrar BD):** `docker-compose down -v` (Útil si rompes la base de datos durante las pruebas).
 
 ## 👤 Credenciales por Defecto
 
@@ -88,6 +93,16 @@ Explora las siguientes vulnerabilidades implementadas en el sistema:
 *   **Ubicación:** Parámetro `target` en la URL.
 *   **Objetivo:** Redirigir a los usuarios a sitios web maliciosos aprovechando la confianza en el dominio de la academia.
 *   **Laboratorio:** Sigue las instrucciones en `LABs/LAB-08-Open-Redirect.md`.
+
+### 7. Cross-Site Request Forgery (CSRF)
+*   **Ubicación:** Formularios de cambio de estado (Perfil, Foro).
+*   **Objetivo:** Forzar a un usuario autenticado a realizar acciones no deseadas (ej. cambiar contraseña) sin su consentimiento.
+*   **Laboratorio:** Incluido en la auditoría final `LABs/LAB-09-Full-Audit-Simulation.md`.
+
+### 8. Simulación de Auditoría Completa (Capstone)
+*   **Descripción:** Un ejercicio integral que combina todas las vulnerabilidades anteriores en un escenario de pentesting realista.
+*   **Objetivo:** Comprometer totalmente la plataforma desde cero.
+*   **Laboratorio:** `LABs/LAB-09-Full-Audit-Simulation.md`.
 
 ## 📂 Estructura del Proyecto
 
