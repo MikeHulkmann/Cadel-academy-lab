@@ -723,6 +723,60 @@ LABS = {
                 <li>Has verificado que <strong>ninguno</strong> de estos ataques funciona en el Modo Seguro y puedes explicar <strong>por qué</strong>, señalando el código fuente correcto.</li>
             </ol>
         """
+    },
+    "lab-10-network-analysis": {
+        "title": "Laboratorio 10: Análisis de Tráfico de Red (Wireshark)",
+        "summary": "Interceptar tráfico HTTP para robar credenciales en texto plano y analizar firmas de ataques SQLi/XSS desde la perspectiva de un Blue Team.",
+        "content": """
+            <h2>🎯 Objetivo</h2>
+            <p>Comprender la importancia del cifrado en las comunicaciones web interceptando tráfico real. Analizarás la diferencia entre HTTP y HTTPS y aprenderás a detectar firmas de ataques (SQLi/XSS) en los paquetes de red.</p>
+
+            <h2>📋 Prerrequisitos</h2>
+            <ol>
+                <li><strong>Wireshark</strong> instalado en tu máquina anfitriona.</li>
+                <li>Entorno Cadel Academy corriendo.</li>
+            </ol>
+
+            <hr>
+
+            <h2>📝 Ejercicio 1: Interceptación de Credenciales (Cleartext)</h2>
+            <p><strong>Escenario:</strong> Un atacante está escuchando en la red local. Un usuario inicia sesión en la versión no segura de la academia.</p>
+            <ol>
+                <li>Abre Wireshark y selecciona la interfaz de bucle local (Loopback/Adapter for loopback).</li>
+                <li>Aplica el filtro: <code>http.request.method == "POST"</code>.</li>
+                <li>En la web vulnerable (puerto 8080), inicia sesión con cualquier usuario.</li>
+                <li>En Wireshark, inspecciona el paquete capturado (HTML Form URL Encoded). Verás la contraseña en texto plano.</li>
+            </ol>
+
+            <hr>
+
+            <h2>📝 Ejercicio 2: Análisis de Ataques (Blue Team)</h2>
+            <p><strong>Escenario:</strong> Eres un analista de seguridad (SOC) buscando evidencias de un ataque reciente.</p>
+            <ol>
+                <li>Limpia la captura.</li>
+                <li>Lanza un ataque SQL Injection en el chat: <code>' UNION SELECT 1, @@version -- -</code>.</li>
+                <li>En Wireshark, busca el paquete. Verás el código SQL malicioso viajando por la red.</li>
+                <li>Esto demuestra cómo los IDS (Sistemas de Detección de Intrusos) identifican amenazas buscando patrones en el tráfico.</li>
+            </ol>
+
+            <hr>
+
+            <h2>📝 Ejercicio 3: La Protección de HTTPS</h2>
+            <p><strong>Objetivo:</strong> Verificar que el cifrado protege los datos.</p>
+            <ol>
+                <li>Repite el inicio de sesión pero en el <strong>Modo Seguro</strong> (puerto 8443).</li>
+                <li>Intenta encontrar la contraseña en Wireshark.</li>
+                <li>Solo verás tráfico TLS cifrado (Application Data), haciendo imposible el robo de credenciales por este medio.</li>
+            </ol>
+
+            <hr>
+
+            <h2>🛡️ Preguntas de Reflexión</h2>
+            <ol>
+                <li>¿Por qué es peligroso conectarse a redes Wi-Fi públicas abiertas?</li>
+                <li>¿Qué información metadata (no cifrada) se puede ver incluso en una conexión HTTPS? (Pista: DNS, SNI).</li>
+            </ol>
+        """
     }
 }
 

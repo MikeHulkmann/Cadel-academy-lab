@@ -105,7 +105,12 @@ Explora las siguientes vulnerabilidades implementadas en el sistema:
 *   **Objetivo:** Forzar a un usuario autenticado a realizar acciones no deseadas (ej. cambiar contraseña) sin su consentimiento.
 *   **Laboratorio:** Incluido en `LABs/LAB-09-Full-Audit-Simulation.md`
 
-### 8. Simulación de Auditoría Completa (Capstone)
+### 8. Análisis de Tráfico de Red (Blue Team)
+*   **Herramienta:** Wireshark.
+*   **Objetivo:** Interceptar credenciales en texto plano (HTTP) y detectar firmas de ataques en la red.
+*   **Laboratorio:** `LABs/LAB-10-Network-Analysis.md` (Nuevo)
+
+### 9. Simulación de Auditoría Completa (Capstone)
 *   **Descripción:** Un ejercicio integral que combina todas las vulnerabilidades anteriores en un escenario de pentesting realista.
 *   **Objetivo:** Comprometer totalmente la plataforma desde cero.
 *   **Laboratorio:** `LABs/LAB-09-Full-Audit-Simulation.md` (Capstone)
