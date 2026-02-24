@@ -53,6 +53,9 @@ Activa el **Modo Vulnerable** (Puerto 8080). Tu objetivo es encontrar, explotar 
     *   **Objetivo:** Lograr que aparezca un `alert(document.cookie)` o `alert(document.domain)`.
     *   **Guía:** **LAB-04 (XSS Stored)**.
     *   **Payload:** `<img src=x onerror=alert(document.cookie)>`
+*   **Prueba (Avanzada):** Escalada del ataque.
+    *   **Objetivo:** Utilizar el XSS Stored para exfiltrar la cookie de sesión a un servidor controlado por el atacante o redirigir a la víctima.
+    *   **Guía:** **LAB-04b (XSS Avanzado)**.
 
 ### 2.3.1. XSS Avanzado: Redirección Maliciosa
 *   **Objetivo:** Inyectar un script en el Foro que redirija a los visitantes a una web externa (ej. YouTube).
@@ -80,6 +83,12 @@ Activa el **Modo Vulnerable** (Puerto 8080). Tu objetivo es encontrar, explotar 
 *   **Objetivo:** Construir una URL que, bajo el dominio de Cadel Academy, redirija a un sitio de phishing simulado (ej. `youtube.com`).
 *   **Guía:** Sigue las instrucciones del **LAB-08 (Open Redirect)**.
 *   **Payload:** `/redirect?target=https://youtube.com`
+
+### 2.7. Cross-Site Request Forgery (CSRF)
+*   **Prueba:** Verificación de mecanismos anti-CSRF en operaciones sensibles.
+*   **Vector:** Formularios de cambio de contraseña (`/profile`) o publicación en foro.
+*   **Objetivo:** Confirmar mediante inspección de código (Caja Gris) que los formularios no incluyen tokens aleatorios (`csrf_token`) y que la aplicación confía únicamente en las cookies de sesión.
+*   **Guía:** Revisar conceptos del **LAB-06** sobre atributos `SameSite`.
 
 ---
 
@@ -138,4 +147,5 @@ Has completado la auditoría si:
 1.  Has obtenido acceso administrativo sin credenciales.
 2.  Has extraído datos de la base de datos usando una inyección UNION.
 3.  Has ejecutado JavaScript en el navegador de una víctima (simulada) mediante XSS Reflejado y Almacenado.
-4.  Has verificado que **ninguno** de estos ataques funciona en el Modo Seguro y puedes explicar **por qué**, señalando el código fuente correcto.
+4.  Has identificado la falta de protección CSRF en los formularios clave.
+5.  Has verificado que **ninguno** de estos ataques funciona en el Modo Seguro y puedes explicar **por qué**, señalando el código fuente correcto.

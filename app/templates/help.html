@@ -93,6 +93,12 @@
                         <div class="accordion-body">Cadel Academy se centra en la comprensión técnica más que en un formato CTF (Capture The Flag) tradicional. Consulte la sección <strong>Blog</strong> para análisis detallados y metodologías de explotación. El éxito se define por la reproducción efectiva de la vulnerabilidad.</div>
                     </div>
                 </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq13">¿Por qué la redirección (Open Redirect) muestra una página de aviso?</button></h2>
+                    <div id="faq13" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">En esta versión de demostración pública, las redirecciones reales a sitios externos están bloqueadas para evitar abusos. La página de aviso confirma que la vulnerabilidad existe y que el ataque habría tenido éxito en un entorno real.</div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -205,6 +211,40 @@
                             
                             <h5>Fase 3: Escaneo Pasivo</h5>
                             <p>Utilizar el escáner pasivo de <strong>OWASP ZAP</strong> para detectar automáticamente configuraciones de cookies inseguras en todo el sitio.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Open Redirect -->
+                <div class="col-md-12 mb-4">
+                    <div class="card border-danger">
+                        <div class="card-header bg-danger text-white">6. Open Redirect</div>
+                        <div class="card-body">
+                            <h5>Fase 1: Descubrimiento de Parámetros</h5>
+                            <p>Identificar parámetros en la URL que acepten destinos, como <code>next</code>, <code>url</code>, o <code>target</code>. En este lab: <code>/redirect?target=...</code>.</p>
+                            
+                            <h5>Fase 2: Evasión de Filtros</h5>
+                            <p>Si hay filtros, probar esquemas alternativos (<code>//google.com</code>), codificación URL, o caracteres de escape.</p>
+                            
+                            <h5>Fase 3: Phishing</h5>
+                            <p>Construir un enlace que parezca legítimo (dominio de la academia) pero redirija a un sitio malicioso para robar credenciales.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CSRF -->
+                <div class="col-md-12 mb-4">
+                    <div class="card border-warning">
+                        <div class="card-header bg-warning text-dark">7. Cross-Site Request Forgery (CSRF)</div>
+                        <div class="card-body">
+                            <h5>Fase 1: Inspección de Tokens</h5>
+                            <p>Revisar el código fuente de los formularios (ej. Cambio de Contraseña). Verificar si existe un campo oculto <code>csrf_token</code> o similar.</p>
+                            
+                            <h5>Fase 2: Generación de PoC</h5>
+                            <p>Crear una página HTML maliciosa que envíe automáticamente una petición POST al endpoint vulnerable (ej. <code>/profile</code>) al ser visitada por la víctima.</p>
+                            
+                            <h5>Fase 3: Ejecución</h5>
+                            <p>Si la aplicación acepta la petición basándose solo en las cookies de sesión (sin validar origen o token), el ataque es exitoso.</p>
                         </div>
                     </div>
                 </div>

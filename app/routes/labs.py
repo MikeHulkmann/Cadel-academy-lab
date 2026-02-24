@@ -622,6 +622,12 @@ LABS = {
                         <li><strong>Payload:</strong> <code>&lt;img src=x onerror=alert(document.cookie)&gt;</code></li>
                     </ul>
                 </li>
+                <li><strong>Prueba (Avanzada):</strong> Escalada del ataque XSS para lograr efectos persistentes y exfiltración.
+                    <ul>
+                        <li><strong>Objetivo:</strong> Realizar un ataque de <em>Cookie Stealing</em> o redirección forzada.</li>
+                        <li><strong>Guía:</strong> <strong>LAB-04b (XSS Avanzado)</strong>.</li>
+                    </ul>
+                </li>
             </ul>
 
             <h3>2.4. Carga de Archivos Sin Restricciones (RCE)</h3>
@@ -638,6 +644,23 @@ LABS = {
                 <li><strong>Vector:</strong> Inspección de los atributos de las cookies.</li>
                 <li><strong>Objetivo:</strong> Determinar si la cookie de sesión es vulnerable a robo (falta de <code>HttpOnly</code>) o interceptación (falta de <code>Secure</code>).</li>
                 <li><strong>Guía:</strong> Utiliza la consola y la pestaña "Aplicación" de las herramientas de desarrollador, como se describe en el <strong>LAB-06 (Insecure Cookies)</strong>.</li>
+            </ul>
+
+            <h3>2.6. Redirección Abierta (Open Redirect)</h3>
+            <ul>
+                <li><strong>Prueba:</strong> Abusar de funcionalidades de redirección para dirigir a los usuarios a sitios externos.</li>
+                <li><strong>Vector:</strong> Parámetro <code>target</code> en la URL.</li>
+                <li><strong>Objetivo:</strong> Construir una URL que, bajo el dominio de Cadel Academy, redirija a un sitio de phishing simulado (ej. <code>youtube.com</code>).</li>
+                <li><strong>Guía:</strong> Sigue las instrucciones del <strong>LAB-08 (Open Redirect)</strong>.</li>
+                <li><strong>Payload:</strong> <code>/redirect?target=https://youtube.com</code></li>
+            </ul>
+
+            <h3>2.7. Cross-Site Request Forgery (CSRF)</h3>
+            <ul>
+                <li><strong>Prueba:</strong> Verificación de mecanismos anti-CSRF en cambios de estado.</li>
+                <li><strong>Vector:</strong> Inspección del código fuente de los formularios (Cambio de contraseña, Perfil, Foro).</li>
+                <li><strong>Objetivo:</strong> Confirmar la ausencia de tokens CSRF ocultos (<code>csrf_token</code>) y la dependencia exclusiva de cookies para la sesión.</li>
+                <li><strong>Guía:</strong> Revisar conceptos del <strong>LAB-06</strong> sobre atributos <code>SameSite</code> y validación de origen.</li>
             </ul>
 
             <hr>
