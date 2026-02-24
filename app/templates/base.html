@@ -40,6 +40,11 @@
                 <div class="d-flex gap-2 mt-3 mt-lg-0 flex-column flex-lg-row">
                     <button class="btn btn-sm btn-outline-light" id="theme-toggle"><i class="bi bi-moon-stars-fill"></i></button>
                     
+                    <!-- Botón Buscador -->
+                    <a href="{{ url_for('search.search') }}" class="btn btn-sm btn-outline-light" title="Buscar">
+                        <i class="bi bi-search"></i>
+                    </a>
+                    
                     {% if session.get('user_id') %}
                         <a href="/logout" class="btn btn-light btn-sm text-dark"><i class="bi bi-box-arrow-right me-1"></i>Salir</a>
                     {% else %}
