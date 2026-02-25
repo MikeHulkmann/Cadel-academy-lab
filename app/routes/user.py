@@ -28,13 +28,30 @@ def profile():
             # [NOTA DE AUDITORÍA]
             # Los datos se guardan tal cual en la base de datos.
             # La vulnerabilidad XSS Stored ocurre en el momento de la visualización (renderizado), no en el guardado.
-            cursor.execute("""
-                UPDATE users 
-                SET full_name=%s, email=%s, phone=%s, address=%s, city=%s, website=%s, bio=%s
-                WHERE id=%s
-            """, (full_name, email, phone, address, city, website, bio, user_id))
-            conn.commit()
-            flash("Perfil actualizado correctamente.")
+            if get_security_level() == 'vulnerable':
+                # [VULNERABLE] SQL Injection
+                # Concatenación directa. Nota: Si el payload XSS lleva comillas simples, romperá la SQL (Error 500).
+                # El atacante deberá escapar sus comillas o usar dobles para que funcione.
+                # [MODIFICACIÓN] Convertimos a una sola línea para permitir que el comentario (# o --) anule el WHERE original.
+                query = f"UPDATE users SET full_name='{full_name}', email='{email}', phone='{phone}', address='{address}', city='{city}', website='{website}', bio='{bio}' WHERE id={user_id}"
+                try:
+                    print(f"[DEBUG SQL] Ejecutando: {query}")
+                    cursor.execute(query)
+                    conn.commit()
+                    flash("Perfil actualizado correctamente.")
+                except Exception as e:
+                    # Capturamos el error de sintaxis para no romper la página (Error 500)
+                    # No se muestra el error al usuario para no dar pistas, la operación simplemente falla silenciosamente.
+                    pass
+            else:
+                # [SEGURO] Consultas Parametrizadas
+                cursor.execute("""
+                    UPDATE users 
+                    SET full_name=%s, email=%s, phone=%s, address=%s, city=%s, website=%s, bio=%s
+                    WHERE id=%s
+                """, (full_name, email, phone, address, city, website, bio, user_id))
+                conn.commit()
+                flash("Perfil actualizado correctamente.")
         
         elif action == 'change_password':
             current_password = request.form.get('current_password')

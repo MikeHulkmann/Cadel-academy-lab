@@ -315,6 +315,73 @@ LABS = {
             </ol>
         """
     },
+    "lab-04c-sql-injection-profile": {
+        "title": "Laboratorio 04c: SQL Injection (Escalada de Privilegios en Perfil)",
+        "summary": "Explotar una vulnerabilidad de Inyección SQL en el formulario de actualización de perfil para escalar privilegios a 'admin' o modificar los datos de otro usuario (IDOR).",
+        "content": """
+            <h2>🎯 Objetivo</h2>
+            <p>Explotar una vulnerabilidad de Inyección SQL en el formulario de actualización de perfil para escalar privilegios a 'admin' o modificar los datos de otro usuario (IDOR).</p>
+
+            <h2>📋 Prerrequisitos</h2>
+            <ol>
+                <li>Tener una sesión activa (ej. como 'alumno').</li>
+                <li>Modo Vulnerable activo.</li>
+            </ol>
+
+            <h2>📝 Instrucciones Paso a Paso</h2>
+            <p>La vulnerabilidad reside en cómo la aplicación construye la consulta <code>UPDATE</code> al guardar los cambios del perfil, usando una concatenación directa en una sola línea. Esto nos permite "secuestrar" la consulta.</p>
+
+            <hr>
+
+            <h3>Escenario A: Escalada de Privilegios (Convertirse en Admin)</h3>
+            <p><strong>Objetivo:</strong> Modificar nuestro propio rol de 'user' a 'admin'.</p>
+            <ol>
+                <li><strong>Navegación:</strong> Ve a la sección <strong>Mi Perfil</strong>.</li>
+                <li><strong>Inyección:</strong> En el formulario de "Información Personal", localiza el campo <strong>Bio</strong>.</li>
+                <li><strong>Payload:</strong> Introduce el siguiente payload en el campo <strong>Bio</strong>:
+                    <pre><code class="language-sql">Estudiante ejemplar', role='admin' #</code></pre>
+                </li>
+                <li><strong>Ejecución:</strong> Haz clic en "Guardar Cambios".</li>
+            </ol>
+
+            <h4>Análisis Técnico</h4>
+            <p>La consulta SQL resultante en el servidor será:</p>
+            <pre><code class="language-sql">UPDATE users SET ..., bio='Estudiante ejemplar', role='admin' #' WHERE id=3</code></pre>
+            <ul>
+                <li><code>bio='...'</code> cierra el campo bio.</li>
+                <li><code>, role='admin'</code> añade una nueva asignación al <code>SET</code>, cambiando el rol.</li>
+                <li><code>#</code> comenta el resto de la consulta, incluyendo la cláusula <code>WHERE</code> original.</li>
+                <li><strong>¡Cuidado!</strong> Como el <code>#</code> anula el <code>WHERE</code>, ¡este payload actualizará <strong>TODOS</strong> los usuarios a 'admin'! Esto es un efecto secundario peligroso y educativo.</li>
+            </ul>
+
+            <h4>Verificación</h4>
+            <p>Refresca la página. En la tarjeta de perfil de la izquierda, tu rol ahora debería ser <strong>admin</strong>.</p>
+
+            <hr>
+
+            <h3>Escenario B: Modificación de Datos de Otro Usuario (IDOR)</h3>
+            <p><strong>Objetivo:</strong> Cambiar el nombre completo del usuario 'admin' (cuyo ID es 1).</p>
+            <ol>
+                <li><strong>Navegación:</strong> Ve a <strong>Mi Perfil</strong>.</li>
+                <li><strong>Preparación:</strong> En el campo <strong>Nombre Completo</strong>, escribe el nuevo nombre que quieres para el admin, por ejemplo: <code>Admin Pwned</code>.</li>
+                <li><strong>Inyección:</strong> En el campo <strong>Bio</strong>, introduce el siguiente payload:
+                    <pre><code class="language-sql">Bio sin importancia' WHERE id=1 #</code></pre>
+                </li>
+                <li><strong>Ejecución:</strong> Haz clic en "Guardar Cambios".</li>
+            </ol>
+
+            <h4>Análisis Técnico</h4>
+            <p>La consulta SQL resultante será:</p>
+            <pre><code class="language-sql">UPDATE users SET full_name='Admin Pwned', ..., bio='Bio sin importancia' WHERE id=1 #' WHERE id=3</code></pre>
+            <ul>
+                <li><code>WHERE id=1</code> reemplaza la cláusula <code>WHERE</code> original, apuntando al usuario 'admin'.</li>
+                <li><code>#</code> comenta el <code>WHERE id=3</code> original, evitando un error de sintaxis.</li>
+            </ul>
+
+            <h4>Verificación</h4>
+            <p>Cierra sesión y ve al <strong>Blog</strong> o al <strong>Foro</strong>. Busca una publicación del administrador. Su nombre de usuario ahora debería ser "Admin Pwned".</p>
+        """
+    },
     "lab-05-file-upload-rce": {
         "title": "Laboratorio 05: Unrestricted File Upload",
         "summary": "Subir un archivo con contenido ejecutable (HTML/JS) aprovechando la falta de validación en el formulario de subida del foro.",

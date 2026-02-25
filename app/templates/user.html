@@ -24,14 +24,24 @@
                 <div class="card-body text-center">
                     <div class="rounded-circle mx-auto mb-3 bg-secondary d-flex align-items-center justify-content-center text-white" style="width: 150px; height: 150px; font-size: 4rem;"><i class="bi bi-person-fill"></i></div>
                     <h5 class="my-3">
-                        <!-- [AUDITORÍA] XSS Stored en Nombre de Usuario -->
-                        {% if security_level == 'vulnerable' %}
-                            {{ user.username | safe }}
-                        {% else %}
-                            {{ user.username }}
-                        {% endif %}
+                        {{ user.username }}
                     </h5>
+                    <!-- [AUDITORÍA] Visualización Vulnerable de Nombre y Bio -->
+                    <h6 class="mb-2 text-primary">
+                        {% if security_level == 'vulnerable' %}
+                            {{ user.full_name | safe }}
+                        {% else %}
+                            {{ user.full_name }}
+                        {% endif %}
+                    </h6>
                     <p class="text-muted mb-1">{{ user.role }}</p>
+                    <div class="mt-2 small">
+                        {% if security_level == 'vulnerable' %}
+                            {{ user.bio | safe }}
+                        {% else %}
+                            {{ user.bio }}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
 

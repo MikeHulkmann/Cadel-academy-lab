@@ -66,6 +66,32 @@ ARTICLES = {
             <p>Herramientas como <strong>SQLMap</strong> automatizan este proceso de inferencia y extracción, permitiendo volcar bases de datos completas (Database Dump) en minutos.</p>
         """
     },
+    "sql-injection-update": {
+        "title": "Análisis de SQL Injection en sentencias UPDATE",
+        "date": "2026-02-22",
+        "summary": "Cómo una inyección en un formulario de perfil puede llevar a la escalada de privilegios o a la modificación no autorizada de datos de otros usuarios (IDOR).",
+        "content": """
+            <p>Mientras que las inyecciones SQL en sentencias <code>SELECT</code> son famosas por la extracción de datos, las que ocurren en sentencias <code>UPDATE</code> son un vector igualmente crítico para la modificación no autorizada de la integridad de los datos, escalada de privilegios y ataques de denegación de servicio.</p>
+            
+            <h4>Análisis del Código Vulnerable</h4>
+            <p>En el perfil de usuario de Cadel Academy, la consulta de actualización se construye en una sola línea mediante un f-string:</p>
+            <pre><code class="language-python">query = f"UPDATE users SET ..., bio='{bio}' WHERE id={user_id}"</code></pre>
+            <p>Esta construcción es vulnerable porque permite a un atacante cerrar la cadena de un campo (como <code>bio</code>) e inyectar código SQL adicional que será ejecutado por la base de datos.</p>
+            
+            <h4>Vector de Ataque 1: Escalada de Privilegios</h4>
+            <p>Un atacante puede añadir una nueva asignación a la cláusula <code>SET</code> para modificar su propio rol.</p>
+            <p><strong>Payload en el campo Bio:</strong> <code>Hacker', role='admin' #</code></p>
+            <p>La consulta final se convierte en:</p>
+            <pre><code class="language-sql">UPDATE users SET ..., bio='Hacker', role='admin' #' WHERE id=3</code></pre>
+            <p>El carácter <code>#</code> comenta el resto de la línea, incluyendo la cláusula <code>WHERE</code> original. Esto tiene el efecto secundario de aplicar el cambio a <strong>todas las filas</strong> de la tabla, un resultado catastrófico.</p>
+
+            <h4>Vector de Ataque 2: IDOR (Insecure Direct Object Reference)</h4>
+            <p>Un atacante puede secuestrar la consulta para que afecte a un usuario diferente, reemplazando la cláusula <code>WHERE</code>.</p>
+            <p><strong>Payload en el campo Bio:</strong> <code>Bio modificado' WHERE id=1 #</code></p>
+            <pre><code class="language-sql">UPDATE users SET ..., bio='Bio modificado' WHERE id=1 #' WHERE id=3</code></pre>
+            <p>Aquí, el <code>WHERE id=1</code> del atacante toma precedencia, y el <code>#</code> anula el <code>WHERE id=3</code> original, dirigiendo la actualización al usuario 'admin'.</p>
+        """
+    },
     "xss-reflected": {
         "title": "Cross-Site Scripting (XSS) Reflejado: Mecánica e Impacto",
         "date": "2026-02-22",
